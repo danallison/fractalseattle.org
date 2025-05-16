@@ -1,5 +1,7 @@
 # Fractal Seattle
 
+<img src="/sierpinski-logo.png" style="width:100px"/>
+
 🚧 under construction 🚧
 
 ## About

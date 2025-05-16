@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sierpinski Triangle (SVG)</title>
+<style>
+  body { margin: 0; display: flex; flex-direction: column; align-items: center; height: 100vh; }
+  #controls { margin: 1em; display: flex; flex-direction: column; align-items: center; gap: 0.5em; }
+  svg { width: 80vmin; height: calc(80vmin * 0.866); }
+  polygon { fill: none; stroke: #000; stroke-width: 1; }
+</style>
+</head>
+<body>
+  <div style="margin-top:8px;">Image rendered as SVG. Use a screenshot tool to convert to raster image (png, jpeg, etc.).</div>
+  <div id="controls">
+    <label>Upload new center image: <input type="file" id="imgInput" accept="image/*"></label>
+  </div>
+  <svg id="sierpinskiSvg" xmlns="http://www.w3.org/2000/svg" width="512" height="443" viewBox="0 0 512 443"></svg>
+
+<script>
+(() => {
+  const svg      = document.getElementById('sierpinskiSvg');
+  const imgInput = document.getElementById('imgInput');
+  const controls = Array.from(document.querySelectorAll('#controls input'));
+
+  const side  = 512;
+  const H     = side * Math.sqrt(3) / 2;
+  const depth = 9;
+
+  let img = new Image();
+
+  function disableControls() { controls.forEach(i => i.disabled = true); }
+  function enableControls()  { controls.forEach(i => i.disabled = false); }
+
+  function clearSvg() {
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+  }
+
+  function renderSvg() {
+    disableControls();
+    clearSvg();
+
+    const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+    svg.appendChild(defs);
+
+    let clipId = 0;
+    const queue = [{ x: 0, y: H, s: side, d: depth }];
+
+    while (queue.length) {
+      const { x, y, s, d } = queue.shift();
+      const h = s * Math.sqrt(3) / 2;
+
+      if (d === 0) {
+        const poly = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+        poly.setAttribute('points', `${x},${y} ${x+s},${y} ${x+s/2},${y-h}`);
+        svg.appendChild(poly);
+      } else {
+        const id = `clip${clipId++}`;
+        const cp = document.createElementNS('http://www.w3.org/2000/svg','clipPath'); cp.setAttribute('id', id);
+        const tri = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+        tri.setAttribute('points', `${x+s/2},${y} ${x+3*s/4},${y-h/2} ${x+s/4},${y-h/2}`);
+        cp.appendChild(tri);
+        defs.appendChild(cp);
+
+        const im = document.createElementNS('http://www.w3.org/2000/svg','image');
+        im.setAttributeNS('http://www.w3.org/1999/xlink','href', img.src);
+        im.setAttribute('x', x+s/4);
+        im.setAttribute('y', y-h/2);
+        im.setAttribute('width', s/2);
+        im.setAttribute('height', h/2);
+        im.setAttribute('clip-path', `url(#${id})`);
+        svg.appendChild(im);
+
+        const outline = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+        outline.setAttribute('points', `${x+s/2},${y} ${x+3*s/4},${y-h/2} ${x+s/4},${y-h/2}`);
+        svg.appendChild(outline);
+
+        const s2 = s/2, h2 = h/2;
+        queue.push({ x, y, s: s2, d: d-1 });
+        queue.push({ x: x+s2, y, s: s2, d: d-1 });
+        queue.push({ x: x+s2/2, y: y-h2, s: s2, d: d-1 });
+      }
+    }
+
+    enableControls();
+  }
+
+  imgInput.addEventListener('change', () => {
+    const file = imgInput.files[0];
+    if (!file) return;
+    const blobUrl = URL.createObjectURL(file);
+    img.onload = () => { URL.revokeObjectURL(blobUrl); renderSvg(); };
+    img.src = blobUrl;
+  });
+
+  // initial render
+  img.src = 'seattle-space-needle.png';
+  img.onload = renderSvg;
+})();
+</script>
+</body>
+</html>
