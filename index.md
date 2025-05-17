@@ -1,6 +1,6 @@
 # Fractal Seattle
 
-<img src="/sierpinski-logo.png" style="width:100px"/>
+<img src="/sierpinski-logo.png" style="width:185px"/>
 
 🚧 under construction 🚧
 
@@ -14,6 +14,7 @@ __Fractal Seattle__ is, in concept, Seattle's version of [Fractal NYC](https://f
 * [Fractal campus bootcamp](https://fractalcampus.com/)
 * [Source for this website](https://github.com/danallison/fractalseattle.org)
 * [Origin tweet](https://x.com/danallison/status/1916223634286514638)
+* [Sierpinski triangle logo generator](/sierpinski)
 
 ## Contact
 
