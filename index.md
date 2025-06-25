@@ -29,4 +29,4 @@ Events can be found through our calendar, and most communication happens through
 
 ## Contact
 
-If you're interested in getting involved, contact Dan Allison on [twitter](https://x.com/danallison) or by [email](mailto:dan.allison@protonmail.com).
+If you're interested in getting involved, fill out [this form](https://docs.google.com/forms/d/e/1FAIpQLSfi6WPpoIKwCVquofRTZ0IvzTpnnFF5TR6QRn0AbDmIx-WUNw/viewform) and we'll get in touch.
